@@ -38,6 +38,18 @@ public class BaseController {
         return students;
     }
 
+    // Below code can be used as client to access above method !!
+
+    /*RestTemplate restTemplate = new RestTemplate();
+    ResponseEntity<Students> studentList = restTemplate.getForEntity("http://localhost:8080/rest-webservice/student", Students.class);
+    if(studentList.getStatusCode() == HttpStatus.OK){
+        for(Student student:studentList.getBody().getStudentList()){
+            System.out.println(student.toString());
+        }
+    }else{
+        System.out.println("Problem !!");
+    }*/
+
     @RequestMapping(value = "/student", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
     @ResponseStatus(HttpStatus.CREATED)
     public Student saveStudent(@RequestBody Student student) {

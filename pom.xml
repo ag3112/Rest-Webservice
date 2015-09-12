@@ -14,6 +14,7 @@
         <spring-version>4.1.6.RELEASE</spring-version>
     </properties>
 
+    <!-- To ensure that the maven build not get fail due to missing web.xml-->
     <build>
         <plugins>
             <plugin>

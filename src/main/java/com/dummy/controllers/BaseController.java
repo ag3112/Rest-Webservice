@@ -1,14 +1,17 @@
 package com.dummy.controllers;
 
-import com.dummy.beans.Student;
-import com.dummy.beans.Students;
+import com.dummy.beans.*;
+import com.dummy.beans.Error;
 import com.dummy.dao.DataRepository;
+import com.dummy.exception.DataException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -50,12 +53,24 @@ public class BaseController {
         System.out.println("Problem !!");
     }*/
 
-    @RequestMapping(value = "/student", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+    @RequestMapping(value = "/student", method = RequestMethod.POST, produces = "application/xml", consumes = "application/xml")
     @ResponseStatus(HttpStatus.CREATED)
-    public Student saveStudent(@RequestBody Student student) {
+    public Student saveStudent(@RequestBody Student student) throws DataException {
         logger.info("Inserting " + student.toString());
-        this.dataRepository.saveStudentDetails(student);
+        try{
+            this.dataRepository.saveStudentDetails(student);
+        }catch(Exception he){
+            DataException de =  new DataException(he.getCause().getCause().getMessage());
+            de.initCause(he);
+            throw de;
+        }
         return student;
+    }
+
+    @ExceptionHandler(DataException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public Error anyException(DataException de){
+        return new Error(HttpStatus.CONFLICT.value(),de.getMessage());
     }
 
 }

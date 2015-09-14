@@ -14,7 +14,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Student {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     Long id;
 

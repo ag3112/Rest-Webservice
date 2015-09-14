@@ -43,7 +43,7 @@ public class RootConfig {
         localSessionFactoryBean.setAnnotatedClasses(Student.class);
         Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-        hibernateProperties.setProperty("show_sql", "true");
+        hibernateProperties.setProperty("hibernate.show_sql", "true");
         localSessionFactoryBean.setHibernateProperties(hibernateProperties);
         return localSessionFactoryBean;
     }

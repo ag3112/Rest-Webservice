@@ -20,16 +20,16 @@ public class Student {
     @Column(name = "name")
     String name;
 
-    @Column(name = "contact_number")
+    @Column(name = "contactnumber")
     Long contactNumber;
 
-    @Column(name = "father_name")
+    @Column(name = "fathername")
     String fatherName;
 
-    @Column(name = "mother_name")
+    @Column(name = "mothername")
     String motherName;
 
-    @Column(name = "guardian_name")
+    @Column(name = "guardianname")
     String guardianName;
 
     @Column(name = "address")

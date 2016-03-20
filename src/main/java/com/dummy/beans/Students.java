@@ -11,7 +11,7 @@ import java.util.List;
  */
 @XmlRootElement(name = "Students")
 @Component
-public class Students {
+public class Students implements BaseBean{
 
     private List<Student> studentList;
 

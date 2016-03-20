@@ -2,6 +2,7 @@ package com.dummy.dao;
 
 import com.dummy.beans.Student;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -25,5 +26,10 @@ public class DataRepository {
     public List<Student> getStudentDetails() {
         List<Student> studentList = sessionFactory.getCurrentSession().createCriteria(Student.class).list();
         return studentList;
+    }
+
+    public Student getStudentDetailsByID(Long id) {
+        Student student = (Student) sessionFactory.getCurrentSession().createCriteria(Student.class).add(Restrictions.eq("id",id)).uniqueResult();
+        return student;
     }
 }

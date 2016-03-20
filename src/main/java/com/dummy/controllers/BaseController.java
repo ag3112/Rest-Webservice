@@ -9,6 +9,7 @@ import org.apache.commons.logging.LogFactory;
 import org.hibernate.HibernateException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -18,7 +19,7 @@ import java.util.List;
  * Created by Intel on 8/30/2015.
  */
 @RestController
-public class BaseController {
+public class BaseController implements InitialController<Students> {
 
     private static final Log logger = LogFactory.getLog(BaseController.class);
 
@@ -34,11 +35,35 @@ public class BaseController {
 
     @RequestMapping(value = "/student", method = RequestMethod.GET, produces = "application/xml")
     @ResponseStatus(HttpStatus.OK)
+    @Secured("ROLE_ADMIN")
     public Students getStudentDetail() {
         logger.info("Got 'Get' request for all student details");
         List<Student> studentList = this.dataRepository.getStudentDetails();
         students.setStudentList(studentList);
         return students;
+    }
+
+    @RequestMapping(value = "/studentById", method = RequestMethod.GET, produces = "application/xml")
+    @ResponseStatus(HttpStatus.OK)
+    @Secured({"ROLE_ADMIN","ROLE_USER"})
+    public Student getStudentDetailById(@RequestParam(value = "id") Long id) throws DataException {
+        logger.info("Got 'Get' request for a student whose id is [ "+id+" ]");
+        Student student = this.dataRepository.getStudentDetailsByID(id);
+        if(student == null){
+            throw new DataException("No Student detail found for Id [ "+id+" ]");
+        }
+        return student;
+    }
+
+    @RequestMapping(value = "/studentById/{id}", method = RequestMethod.GET, produces = "application/xml")
+    @ResponseStatus(HttpStatus.OK)
+    public Student getStudentDetailByIdPath(@PathVariable Long id) throws DataException {
+        logger.info("Got 'Get' request for a student whose id is [ "+id+" ]");
+        Student student = this.dataRepository.getStudentDetailsByID(id);
+        if(student == null){
+            throw new DataException("No Student detail found for Id [ "+id+" ]");
+        }
+        return student;
     }
 
     // Below code can be used as client to access above method !!

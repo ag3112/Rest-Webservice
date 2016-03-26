@@ -18,15 +18,25 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        httpSecurity.authorizeRequests().regexMatchers("/student").hasRole("ADMIN").and()
-                .httpBasic();
+        httpSecurity.exceptionHandling().accessDeniedPage("/AccessDenied")
+                .and()
+                .authorizeRequests()
+                .regexMatchers("/student").hasAnyRole("ADMIN")
+                .regexMatchers("student.+").hasAnyRole("USER").and()
+                .formLogin()
+                .and().sessionManagement().maximumSessions(1).maxSessionsPreventsLogin(true);
     }
 
     @Autowired
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.authenticationProvider(new CustomSecurityConfig());
+//        auth.authenticationProvider(new CustomSecurityConfig());
         /*auth.inMemoryAuthentication().withUser("Ankit").password("ankit").roles("USER")
                 .and().withUser("admin").password("admin").roles("ADMIN");*/
+
+        // Ldap Configuration
+        auth.ldapAuthentication().ldapAuthoritiesPopulator(new LdapAuthPopulator()).userSearchBase("ou=People").userSearchFilter("(mail={0})").
+                groupSearchBase("ou=Groups").groupSearchFilter("member={0}").contextSource().root("dc=example,dc=com").ldif("classpath:Example.ldif");
+
 
     }
 

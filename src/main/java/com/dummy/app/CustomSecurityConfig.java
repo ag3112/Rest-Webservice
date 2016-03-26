@@ -26,7 +26,7 @@ public class CustomSecurityConfig implements AuthenticationProvider {
             public Collection<? extends GrantedAuthority> getAuthorities() {
                 GrantedAuthority gd = new GrantedAuthority() {
                     public String getAuthority() {
-                        return "ROLE_ADMIN";
+                        return "ROLE_USER";
                     }
                 };
                 List<GrantedAuthority> authList = new ArrayList<GrantedAuthority>();
@@ -43,11 +43,11 @@ public class CustomSecurityConfig implements AuthenticationProvider {
             }
 
             public boolean isAccountNonExpired() {
-                return false;
+                return true;
             }
 
             public boolean isAccountNonLocked() {
-                return false;
+                return true;
             }
 
             public boolean isCredentialsNonExpired() {
